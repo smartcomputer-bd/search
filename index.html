@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>শিক্ষার্থী তথ্য লাইভ অনুসন্ধান সিস্টেম</title>
+    <title>স্টুডেন্ট ইনফো - লাইভ পোর্টাল</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,14 +11,18 @@
     <div class="search-container">
         <h2>শিক্ষার্থী তথ্য লাইভ অনুসন্ধান</h2>
         <div class="input-group">
-            <!-- বাটনটি বাদ দেওয়া হয়েছে এবং oninput ইভেন্ট যোগ করা হয়েছে -->
-            <input type="text" id="rollInput" oninput="liveSearchStudent()" placeholder="শিক্ষার্থীর রোল নম্বর টাইপ করুন...">
+            <input type="text" id="rollInput" oninput="liveSearchStudent()" placeholder="রোল নম্বর টাইপ করুন..." disabled>
         </div>
-        <div id="loading" class="loading">তথ্য লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</div>
+        
+        <div id="loaderArea">
+            <div class="loader-spinner"></div>
+            <div class="loading-text">সার্ভার থেকে ডেটা সিঙ্ক হচ্ছে...</div>
+        </div>
+        
         <div id="errorMsg" class="error"></div>
     </div>
 
-    <div id="profileCard" class="profile-card" style="display: none;">
+    <div id="profileCard" class="profile-card">
         <div class="avatar-zone">
             <img id="studentPhoto" src="" alt="Student Photo">
         </div>
@@ -31,56 +35,65 @@
     </div>
 
     <script>
-        // আপনার গুগল অ্যাপস স্ক্রিপ্ট ওয়েব অ্যাপ ইউআরএল এখানে বসান
-        var apiURL = "https://script.google.com/macros/s/AKfycbytO0KG-8bWkhsJOYNRnD5b0JINtYoE-kiZXybHrQBcW6JZbIZYwNlrdffqnpn2Qh_Ptg/exec"; 
+        // আপনার গুগল অ্যাপস স্ক্রিপ্ট ওয়েব অ্যাপ ইউআরএল নিচে বসান
+        var apiURL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; 
         var studentData = [];
 
-        // পেজ লোড হওয়ার সাথে সাথে ডেটা ফেচ হবে
+        // পেজ লোড হওয়ার সাথে সাথে ব্যাকগ্রাউন্ডে ডেটা লোড হবে
         window.onload = function() {
             fetch(apiURL)
                 .then(response => response.json())
                 .then(data => {
                     studentData = data;
-                    document.getElementById('loading').style.display = 'none';
-                    // ইনপুট বক্সটি ডেটা লোড হওয়ার পর সক্রিয় করুন
-                    document.getElementById('rollInput').disabled = false;
+                    document.getElementById('loaderArea').style.display = 'none';
+                    var input = document.getElementById('rollInput');
+                    input.disabled = false;
+                    input.focus(); // পেজ লোড হলে ইনপুট বক্সে অটো ফোকাস হবে
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error);
-                    document.getElementById('loading').innerText = 'ডেটা লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন।';
+                    console.error('Error:', error);
+                    document.getElementById('loaderArea').innerHTML = '<div class="error">সার্ভার সংযোগে ত্রুটি! পেজটি রিফ্রেশ করুন।</div>';
                 });
         };
 
-        // লাইভ সার্চ ফাংশন (টাইপ করার সাথে সাথে কল হবে)
         function liveSearchStudent() {
             var roll = document.getElementById('rollInput').value.trim();
             var card = document.getElementById('profileCard');
             var errorMsg = document.getElementById('errorMsg');
             
-            // ইনপুট খালি থাকলে প্রোফাইল কার্ড এবং এরর মেসেজ হাইড করে দেবে
             if (roll === '') {
-                card.style.display = 'none';
+                card.classList.remove('active'); // অ্যানিমেশনসহ হাইড
+                setTimeout(() => { if(roll === '') card.style.display = 'none'; }, 300);
                 errorMsg.innerText = '';
                 return;
             }
 
-            // ডেটাবেজে রোলের নিখুঁত মিল খোঁজা
             var student = studentData.find(s => String(s.Roll).trim() === roll);
 
             if (student) {
-                // তথ্য পাওয়া গেলে কার্ডে ডেটা পুশ করা এবং ডিসপ্লে করা
-                document.getElementById('studentName').innerText = student.Name || 'নাই';
+                document.getElementById('studentName').innerText = student.Name || 'জানা যায়নি';
                 document.getElementById('studentRoll').innerText = student.Roll;
-                document.getElementById('studentAddress').innerText = student.Address || 'নাই';
-                document.getElementById('studentMobile').innerText = student.Mobile || 'নাই';
-                document.getElementById('studentPhoto').src = student.Photo_URL || 'https://via.placeholder.com/150';
+                document.getElementById('studentAddress').innerText = student.Address || 'জানা যায়নি';
+                document.getElementById('studentMobile').innerText = student.Mobile || 'জানা যায়নি';
+                
+                // --- স্মার্ট গুগল ড্রাইভ ইমেজ অটো-কনভার্টার ---
+                var rawUrl = student.Photo_URL || '';
+                if (rawUrl.includes('drive.google.com')) {
+                    var fileId = rawUrl.split('/d/')[1]?.split('/')[0];
+                    if (fileId) {
+                        rawUrl = 'https://lh3.googleusercontent.com/d/' + fileId;
+                    }
+                }
+                document.getElementById('studentPhoto').src = rawUrl || 'https://via.placeholder.com/150';
                 
                 errorMsg.innerText = '';
                 card.style.display = 'flex';
+                // ছোট ডিলে দিয়ে ক্লাস যুক্ত করা যাতে CSS Animation টি চমৎকারভাবে ট্রিগার হয়
+                setTimeout(() => { card.classList.add('active'); }, 50);
             } else {
-                // টাইপ করা রোল ম্যাচ না করলে কার্ড হাইড থাকবে এবং এরর দেখাবে
-                card.style.display = 'none';
-                errorMsg.innerText = 'এই রোল নম্বরের কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি।';
+                card.classList.remove('active');
+                setTimeout(() => { card.style.display = 'none'; }, 300);
+                errorMsg.innerText = 'এই রোল নম্বরের কোনো শিক্ষার্থীর তথ্য রেকর্ড নেই।';
             }
         }
     </script>
