@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>শিক্ষার্থী তথ্য লাইভ অনুসন্ধান সিস্টেম</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="search-container">
+        <h2>শিক্ষার্থী তথ্য লাইভ অনুসন্ধান</h2>
+        <div class="input-group">
+            <!-- বাটনটি বাদ দেওয়া হয়েছে এবং oninput ইভেন্ট যোগ করা হয়েছে -->
+            <input type="text" id="rollInput" oninput="liveSearchStudent()" placeholder="শিক্ষার্থীর রোল নম্বর টাইপ করুন...">
+        </div>
+        <div id="loading" class="loading">তথ্য লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</div>
+        <div id="errorMsg" class="error"></div>
+    </div>
+
+    <div id="profileCard" class="profile-card" style="display: none;">
+        <div class="avatar-zone">
+            <img id="studentPhoto" src="" alt="Student Photo">
+        </div>
+        <div class="info-zone">
+            <h3 id="studentName"></h3>
+            <p><strong>রোল নম্বর:</strong> <span id="studentRoll"></span></p>
+            <p><strong>ঠিকানা:</strong> <span id="studentAddress"></span></p>
+            <p><strong>মোবাইল নম্বর:</strong> <span id="studentMobile"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // আপনার গুগল অ্যাপস স্ক্রিপ্ট ওয়েব অ্যাপ ইউআরএল এখানে বসান
+        var apiURL = "https://script.google.com/macros/s/AKfycbytO0KG-8bWkhsJOYNRnD5b0JINtYoE-kiZXybHrQBcW6JZbIZYwNlrdffqnpn2Qh_Ptg/exec"; 
+        var studentData = [];
+
+        // পেজ লোড হওয়ার সাথে সাথে ডেটা ফেচ হবে
+        window.onload = function() {
+            fetch(apiURL)
+                .then(response => response.json())
+                .then(data => {
+                    studentData = data;
+                    document.getElementById('loading').style.display = 'none';
+                    // ইনপুট বক্সটি ডেটা লোড হওয়ার পর সক্রিয় করুন
+                    document.getElementById('rollInput').disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('loading').innerText = 'ডেটা লোড করতে সমস্যা হয়েছে। পেজটি রিফ্রেশ করুন।';
+                });
+        };
+
+        // লাইভ সার্চ ফাংশন (টাইপ করার সাথে সাথে কল হবে)
+        function liveSearchStudent() {
+            var roll = document.getElementById('rollInput').value.trim();
+            var card = document.getElementById('profileCard');
+            var errorMsg = document.getElementById('errorMsg');
+            
+            // ইনপুট খালি থাকলে প্রোফাইল কার্ড এবং এরর মেসেজ হাইড করে দেবে
+            if (roll === '') {
+                card.style.display = 'none';
+                errorMsg.innerText = '';
+                return;
+            }
+
+            // ডেটাবেজে রোলের নিখুঁত মিল খোঁজা
+            var student = studentData.find(s => String(s.Roll).trim() === roll);
+
+            if (student) {
+                // তথ্য পাওয়া গেলে কার্ডে ডেটা পুশ করা এবং ডিসপ্লে করা
+                document.getElementById('studentName').innerText = student.Name || 'নাই';
+                document.getElementById('studentRoll').innerText = student.Roll;
+                document.getElementById('studentAddress').innerText = student.Address || 'নাই';
+                document.getElementById('studentMobile').innerText = student.Mobile || 'নাই';
+                document.getElementById('studentPhoto').src = student.Photo_URL || 'https://via.placeholder.com/150';
+                
+                errorMsg.innerText = '';
+                card.style.display = 'flex';
+            } else {
+                // টাইপ করা রোল ম্যাচ না করলে কার্ড হাইড থাকবে এবং এরর দেখাবে
+                card.style.display = 'none';
+                errorMsg.innerText = 'এই রোল নম্বরের কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি।';
+            }
+        }
+    </script>
+</body>
+</html>
