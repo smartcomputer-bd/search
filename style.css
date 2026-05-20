@@ -1,142 +1,220 @@
+/* Google Fonts থেকে চমৎকার একটি ফন্ট ইমপোর্ট */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
 body {
-    background-color: #f4f6f9;
-    padding: 20px;
+    /* আকর্ষণীয় ভাইব্রেন্ট ডার্ক গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
 }
 
+/* কন্টেইনার গ্লাস-মরফিজম ইফেক্ট */
 .search-container {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 40px 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    transform: translateY(0);
+    transition: all 0.4s ease;
+}
+
+.search-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
 }
 
 h2 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 24px;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-shadow: 0 2px 10px rgba(255,255,255,0.1);
+    letter-spacing: 0.5px;
 }
 
 .input-group {
-    display: flex;
-    gap: 10px;
+    position: relative;
+    width: 100%;
 }
 
+/* অ্যানিমেটেড গ্লোয়িং ইনপুট বক্স */
 input[type="text"] {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    font-size: 18px;
+    color: #fff;
     outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
 input[type="text"]:focus {
-    border-color: #007bff;
+    border-color: #6366f1;
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5), 
+                inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
-button {
-    padding: 12px 24px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s;
+input[type="text"]::placeholder {
+    color: #94a3b8;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
-
-.loading {
+/* মডার্ন স্পিনিং সার্কেল লোডার */
+.loader-spinner {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    border-top-color: #6366f1;
+    animation: spin 1s ease-in-out infinite;
     margin-top: 15px;
-    font-size: 14px;
-    color: #666;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: #94a3b8;
+    font-size: 15px;
+    margin-top: 8px;
 }
 
 .error {
     margin-top: 15px;
-    color: #dc3545;
-    font-size: 14px;
+    color: #f87171;
+    font-size: 15px;
+    font-weight: 600;
+    animation: shake 0.3s ease;
 }
 
-/* প্রোফাইল কার্ড ডিজাইন */
+/* ডায়নামিক ও কালারফুল প্রোফাইল কার্ড */
 .profile-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 24px;
     width: 100%;
-    max-width: 500px;
-    padding: 25px;
+    max-width: 550px;
+    padding: 30px;
     display: flex;
-    gap: 20px;
+    gap: 25px;
     align-items: center;
-    animation: fadeIn 0.4s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* জাভাস্ক্রিপ্ট দিয়ে কার্ড শো করার অ্যানিমেশন ক্লাস */
+.profile-card.active {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* নিয়ন বর্ডারসহ স্টুডেন্ট ফটো জোন */
 .avatar-zone {
     flex-shrink: 0;
+    position: relative;
 }
 
 .avatar-zone img {
-    width: 120px;
-    height: 140px;
+    width: 130px;
+    height: 160px;
     object-fit: cover;
-    border-radius: 6px;
-    border: 2px solid #ddd;
+    border-radius: 16px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
 }
 
+.avatar-zone:hover img {
+    transform: scale(1.05) rotate(2deg);
+    border-color: #6366f1;
+}
+
+/* টেক্সট ইনফরমেশন স্টাইল */
 .info-zone {
     flex: 1;
 }
 
 .info-zone h3 {
-    color: #111;
-    margin-bottom: 12px;
-    font-size: 22px;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 5px;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .info-zone p {
-    color: #555;
-    font-size: 15px;
-    margin-bottom: 8px;
+    color: #cbd5e1;
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .info-zone strong {
-    color: #333;
+    color: #818cf8;
+    width: 110px;
+    display: inline-block;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* ভুল রোল দিলে কাঁপুনির (Shake) অ্যানিমেশন */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
 }
 
-/* মোবাইল রেসপনসিভ */
-@media (max-width: 480px) {
+/* রেসপনসিভ লেআউট (মোবাইল ফ্রেন্ডলি) */
+@media (max-width: 500px) {
     .profile-card {
         flex-direction: column;
         text-align: center;
+        padding: 25px;
     }
-    .input-group {
+    .info-zone p {
         flex-direction: column;
+        gap: 2px;
+        margin-bottom: 12px;
+    }
+    .info-zone strong {
+        width: auto;
+        color: #a5b4fc;
+    }
+    .avatar-zone img {
+        width: 120px;
+        height: 150px;
     }
 }
