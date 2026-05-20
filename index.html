@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>স্মার্ট শিক্ষার্থী তথ্য অনুসন্ধান লাইভ পোর্টাল</title>
+    <title>শিক্ষার্থী তথ্য যাচাইকরণ পোর্টাল</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         * {
@@ -26,64 +27,40 @@
             position: relative;
         }
 
-        /* ব্যাকগ্রাউন্ড ডাইনামিক লাইট ইফেক্ট */
+        /* ব্যাকগ্রাউন্ড গ্লো ইফেক্ট */
         body::before {
             content: '';
             position: absolute;
             width: 300px;
             height: 300px;
-            background: rgba(99, 102, 241, 0.15);
+            background: rgba(99, 102, 241, 0.12);
             border-radius: 50%;
-            top: 10%;
-            left: 10%;
+            top: 15%;
+            left: 15%;
             filter: blur(80px);
             z-index: 0;
         }
 
-        /* লাইভ স্ট্যাটিস্টিকস কাউন্টার */
-        .stats-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
-            border-radius: 30px;
-            color: #a5b4fc;
-            font-size: 14px;
-            margin-bottom: 15px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .stats-badge .dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        /* গ্লাস-মরফিজম মেইন কন্টেইনার */
+        /* মেইন কন্টেইনার */
         .search-container {
             background: rgba(17, 24, 39, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 35px;
+            padding: 40px 35px;
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 550px;
             position: relative;
             z-index: 1;
-            transition: all 0.3s ease;
+            text-align: center;
         }
 
         h2 {
             color: #ffffff;
             font-size: 26px;
             font-weight: 700;
-            text-align: center;
             margin-bottom: 25px;
             background: linear-gradient(to right, #ffffff, #c7d2fe);
             -webkit-background-clip: text;
@@ -104,6 +81,7 @@
             font-size: 17px;
             color: #fff;
             outline: none;
+            text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -113,68 +91,36 @@
             box-shadow: 0 0 25px rgba(99, 102, 241, 0.3);
         }
 
-        /* ডায়নামিক সাজেশন ড্রপডাউন */
-        .suggestion-box {
-            position: absolute;
-            top: 105%;
-            left: 0;
-            right: 0;
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 999;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            display: none;
-        }
-
-        .suggestion-item {
-            padding: 12px 20px;
-            color: #cbd5e1;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.2s;
-        }
-
-        .suggestion-item:hover {
-            background: #334155;
-            color: #fff;
-        }
-
-        .suggestion-item .suggest-roll {
-            color: #818cf8;
-            font-weight: 600;
-        }
-
-        /* এনিমেটেড মডার্ন লোডার */
+        /* লোডার */
         .loader-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .custom-loader {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.05);
-            border-top: 4px solid #6366f1;
+            width: 35px;
+            height: 35px;
+            border: 3px solid rgba(255, 255, 255, 0.05);
+            border-top: 3px solid #6366f1;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+        }
+        .loader-text {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 8px;
         }
 
         .error-message {
             color: #f87171;
-            font-size: 14px;
+            font-size: 15px;
             margin-top: 15px;
-            text-align: center;
             display: none;
             animation: shake 0.3s ease;
         }
 
-        /* আল্ট্রা ডায়নামিক প্রোফাইল কার্ড */
+        /* প্রফেশনাল প্রোফাইল কার্ড */
         .profile-card {
             background: rgba(30, 41, 59, 0.6);
             backdrop-filter: blur(20px);
@@ -186,8 +132,9 @@
             padding: 30px;
             margin-top: 25px;
             display: flex;
-            gap: 25px;
+            flex-direction: column;
             align-items: center;
+            gap: 20px;
             z-index: 1;
             opacity: 0;
             transform: translateY(30px) scale(0.95);
@@ -201,22 +148,19 @@
             transform: translateY(0) scale(1);
         }
 
-        .avatar-zone {
-            position: relative;
+        .card-body {
+            display: flex;
+            width: 100%;
+            gap: 25px;
+            align-items: center;
         }
 
         .avatar-zone img {
-            width: 130px;
-            height: 160px;
+            width: 125px;
+            height: 155px;
             object-fit: cover;
             border-radius: 16px;
             border: 2px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .profile-card.active:hover .avatar-zone img {
-            transform: scale(1.04);
-            border-color: #6366f1;
         }
 
         .info-zone {
@@ -226,21 +170,21 @@
         .info-zone h3 {
             color: #ffffff;
             font-size: 24px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             padding-bottom: 5px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .info-row {
             display: flex;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-size: 15px;
             color: #e2e8f0;
         }
 
         .info-label {
             color: #94a3b8;
-            width: 100px;
+            width: 90px;
             font-weight: 500;
         }
 
@@ -249,22 +193,43 @@
             font-weight: 600;
         }
 
-        /* অ্যানিমেশন কি-ফ্রেম সমূহ */
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.5; } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        /* ডায়নামিক ভেরিফাইড ব্যাজ */
+        .verified-badge {
+            width: 100%;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 10px;
+            border-radius: 12px;
+            color: #10b981;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            animation: pulseBg 2s infinite;
+        }
 
-        /* মোবাইল রেসপনসিভ */
-        @media (max-width: 520px) {
-            .profile-card {
+        .verified-badge i {
+            font-size: 18px;
+        }
+
+        /* অ্যানিমেশনসমূহ */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        @keyframes pulseBg { 0%, 100% { background: rgba(16, 185, 129, 0.1); } 50% { background: rgba(16, 185, 129, 0.2); } }
+
+        /* মোবাইল ফ্রেন্ডলি ডিজাইন */
+        @media (max-width: 500px) {
+            .card-body {
                 flex-direction: column;
                 text-align: center;
-                padding: 25px;
             }
             .info-row {
                 flex-direction: column;
                 gap: 2px;
-                margin-bottom: 12px;
             }
             .info-label {
                 width: 100%;
@@ -275,36 +240,36 @@
 </head>
 <body>
 
-    <div class="stats-badge">
-        <div class="dot"></div>
-        <span id="syncText">সার্ভার সংযোগ করা হচ্ছে...</span>
-    </div>
-
     <div class="search-container">
         <h2>শিক্ষার্থী তথ্য লাইভ অনুসন্ধান</h2>
         
         <div class="search-box-wrapper">
-            <input type="text" id="searchInput" oninput="handleSearchInput()" placeholder="রোল, নাম অথবা মোবাইল নম্বর লিখুন..." autocomplete="off" disabled>
-            
-            <div id="suggestionBox" class="suggestion-box"></div>
+            <input type="text" id="searchInput" oninput="searchByRollOnly()" placeholder="শিক্ষার্থীর রোল নম্বরটি লিখুন..." autocomplete="off" disabled>
         </div>
 
         <div id="loaderArea" class="loader-wrapper">
             <div class="custom-loader"></div>
+            <div class="loader-text">সার্ভার থেকে ডেটা সিঙ্ক হচ্ছে...</div>
         </div>
         
         <div id="errorMsg" class="error-message"></div>
     </div>
 
     <div id="profileCard" class="profile-card">
-        <div class="avatar-zone">
-            <img id="studentPhoto" src="" alt="Student Photo">
+        <div class="card-body">
+            <div class="avatar-zone">
+                <img id="studentPhoto" src="" alt="Student Photo">
+            </div>
+            <div class="info-zone">
+                <h3 id="studentName"></h3>
+                <div class="info-row"><div class="info-label">রোল নম্বর:</div><div class="info-value" id="studentRoll"></div></div>
+                <div class="info-row"><div class="info-label">ঠিকানা:</div><div class="info-value" id="studentAddress"></div></div>
+                <div class="info-row"><div class="info-label">মোবাইল:</div><div class="info-value" id="studentMobile"></div></div>
+            </div>
         </div>
-        <div class="info-zone">
-            <h3 id="studentName"></h3>
-            <div class="info-row"><div class="info-label">রোল নম্বর:</div><div class="info-value" id="studentRoll"></div></div>
-            <div class="info-row"><div class="info-label">ঠিকানা:</div><div class="info-value" id="studentAddress"></div></div>
-            <div class="info-row"><div class="info-label">মোবাইল:</div><div class="info-value" id="studentMobile"></div></div>
+        
+        <div class="verified-badge">
+            <i class="fa-solid fa-circle-check"></i> Verified Student
         </div>
     </div>
 
@@ -313,115 +278,80 @@
         var apiURL = "https://script.google.com/macros/s/AKfycbytO0KG-8bWkhsJOYNRnD5b0JINtYoE-kiZXybHrQBcW6JZbIZYwNlrdffqnpn2Qh_Ptg/exec"; 
         var studentData = [];
 
-        // পেজ ওপেন হলে স্বয়ংক্রিয়ভাবে গুগল শিট থেকে ডেটা লোড হবে
+        // পেজ লোড হওয়ার সাথে সাথে ব্যাকগ্রাউন্ডে ডেটা লোড হবে
         window.onload = function() {
             fetch(apiURL)
                 .then(response => response.json())
                 .then(data => {
                     studentData = data;
-                    // কাউন্টার ডাইনামিক করা
-                    document.getElementById('syncText').innerText = "মোট ডাটা সিঙ্কড: " + data.length + " জন";
                     document.getElementById('loaderArea').style.display = 'none';
                     document.getElementById('searchInput').disabled = false;
                     document.getElementById('searchInput').focus();
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('syncText').innerText = "সার্ভার সংযোগ ব্যর্থ!";
-                    document.getElementById('loaderArea').innerHTML = '<div style="color:#f87171; font-weight:600; margin-top:10px;">ডেটা সিঙ্ক করা যায়নি। পেজ রিফ্রেশ করুন।</div>';
+                    document.getElementById('loaderArea').innerHTML = '<div style="color:#f87171; font-weight:600; margin-top:10px;">সার্ভার সংযোগ ব্যর্থ! পেজ রিফ্রেশ করুন।</div>';
                 });
         };
 
-        // লাইভ টাইপিং হ্যান্ডলার (সার্চ ও সাজেশন কন্ট্রোল)
-        function handleSearchInput() {
-            var query = document.getElementById('searchInput').value.trim().toLowerCase();
-            var suggBox = document.getElementById('suggestionBox');
+        // মোবাইল নম্বর ফরম্যাটার ফাংশন (যেমন: 01919336660 -> 01919-336660)
+        function formatMobileNumber(number) {
+            var cleanNumber = String(number).trim().replace(/-/g, ''); // আগে থেকে হাইফেন থাকলে তা রিমুভ করে ক্লিন করবে
+            if (cleanNumber.length === 11) {
+                return cleanNumber.substring(0, 5) + '-' + cleanNumber.substring(5);
+            }
+            return cleanNumber; // নম্বর ১১ ডিজিটের না হলে মূল নম্বরই ব্যাক করবে
+        }
+
+        // শুধুমাত্র রোল নম্বর দ্বারা লাইভ সার্চ ফাংশন
+        function searchByRollOnly() {
+            var query = document.getElementById('searchInput').value.trim();
             var card = document.getElementById('profileCard');
             var errorMsg = document.getElementById('errorMsg');
 
-            // ইনপুট একদম খালি থাকলে সবকিছু ক্লিন ও হাইড করবে
             if (query === '') {
-                suggBox.style.display = 'none';
                 hideProfileCard();
                 errorMsg.style.display = 'none';
                 return;
             }
 
-            // নাম, রোল অথবা মোবাইল এর সাথে ম্যাচিং ফিল্টারিং (স্মার্ট সার্চ)
-            var matchedStudents = studentData.filter(s => 
-                String(s.Roll).toLowerCase().includes(query) || 
-                String(s.Name).toLowerCase().includes(query) || 
-                String(s.Mobile).toLowerCase().includes(query)
-            );
+            // শুধুমাত্র রোল নম্বরের সাথে নিখুঁত মিল (Exact Match) খোঁজা হচ্ছে
+            var student = studentData.find(s => String(s.Roll).trim() === query);
 
-            if (matchedStudents.length > 0) {
+            if (student) {
                 errorMsg.style.display = 'none';
                 
-                // যদি হুবহু ১টি নিখুঁত মিল পাওয়া যায় (যেমন সঠিক রোল), তবে সরাসরি কার্ড দেখাবে
-                var exactMatch = studentData.find(s => String(s.Roll).trim().toLowerCase() === query);
-                if (exactMatch) {
-                    showProfileCard(exactMatch);
-                    suggBox.style.display = 'none';
-                    return;
-                }
+                document.getElementById('studentName').innerText = student.Name || 'জানা যায়নি';
+                document.getElementById('studentRoll').innerText = student.Roll;
+                document.getElementById('studentAddress').innerText = student.Address || 'জানা যায়নি';
+                
+                // মোবাইল নম্বর ফরম্যাট প্রয়োগ
+                document.getElementById('studentMobile').innerText = formatMobileNumber(student.Mobile);
 
-                // একাধিক মিল থাকলে বা টাইপ করা অবস্থায় ড্রপডাউন সাজেশন তৈরি করবে
-                suggBox.innerHTML = '';
-                matchedStudents.slice(0, 5).forEach(student => { // সর্বোচ্চ ৫টি সাজেশন দেখাবে
-                    var item = document.createElement('div');
-                    item.className = 'suggestion-item';
-                    item.innerHTML = `<span>${student.Name}</span><span class="suggest-roll">রোল: ${student.Roll}</span>`;
-                    item.onclick = function() {
-                        document.getElementById('searchInput').value = student.Roll;
-                        showProfileCard(student);
-                        suggBox.style.display = 'none';
-                    };
-                    suggBox.appendChild(item);
-                });
-                suggBox.style.display = 'block';
+                // ড্রাইভ ইমেজ স্মার্ট ফিল্টার
+                var rawUrl = student.Photo_URL || '';
+                if (rawUrl.includes('drive.google.com')) {
+                    var fileId = rawUrl.split('/d/')[1]?.split('/')[0];
+                    if (fileId) {
+                        rawUrl = 'https://lh3.googleusercontent.com/d/' + fileId;
+                    }
+                }
+                document.getElementById('studentPhoto').src = rawUrl || 'https://via.placeholder.com/150';
+
+                card.style.display = 'flex';
+                setTimeout(() => { card.classList.add('active'); }, 50);
             } else {
-                suggBox.style.display = 'none';
                 hideProfileCard();
-                errorMsg.innerText = 'কোনো তথ্য খুঁজে পাওয়া যায়নি!';
+                errorMsg.innerText = 'দুঃখিত, এই রোল নম্বরের কোনো তথ্য পাওয়া যায়নি!';
                 errorMsg.style.display = 'block';
             }
         }
 
-        // প্রোফাইল কার্ড শো করার অ্যানিমেটেড ফাংশন
-        function showProfileCard(student) {
-            document.getElementById('studentName').innerText = student.Name || 'নাই';
-            document.getElementById('studentRoll').innerText = student.Roll;
-            document.getElementById('studentAddress').innerText = student.Address || 'নাই';
-            document.getElementById('studentMobile').innerText = student.Mobile || 'নাই';
-
-            // ড্রাইভ ইমেজ স্মার্ট ফিল্টার
-            var rawUrl = student.Photo_URL || '';
-            if (rawUrl.includes('drive.google.com')) {
-                var fileId = rawUrl.split('/d/')[1]?.split('/')[0];
-                if (fileId) {
-                    rawUrl = 'https://lh3.googleusercontent.com/d/' + fileId;
-                }
-            }
-            document.getElementById('studentPhoto').src = rawUrl || 'https://via.placeholder.com/150';
-
-            var card = document.getElementById('profileCard');
-            card.style.display = 'flex';
-            setTimeout(() => { card.classList.add('active'); }, 50);
-        }
-
-        // প্রোফাইল কার্ড হাইড করার অ্যানিমেটেড ফাংশন
         function hideProfileCard() {
             var card = document.getElementById('profileCard');
             card.classList.remove('active');
             setTimeout(() => { card.style.display = 'none'; }, 400);
         }
-
-        // সাজেশন বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ করার লজিক
-        document.addEventListener('click', function(e) {
-            if (e.target.id !== 'searchInput') {
-                document.getElementById('suggestionBox').style.display = 'none';
-            }
-        });
     </script>
 </body>
 </html>
