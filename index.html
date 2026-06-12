@@ -1,357 +1,325 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>শিক্ষার্থী তথ্য যাচাইকরণ পোর্টাল</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Hind Siliguri', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student Verification Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+footer{
+margin-top:100px;
+text-align:center;
+font-size:12px;
+color:#666;
+padding:15px;
+border-top:1px solid #ddd;
+}
+body{
+font-family:Poppins,sans-serif;
+background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+background-attachment:fixed;
+margin:0;
+color:#ffffff;
+}
+.wrap{max-width:1000px;margin:auto;padding:20px}
+h1{text-align:center;color:#ffffff}
+.box{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+input,button{
+padding:12px;
+border-radius:14px;
+border:none;
+box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
 
-        body {
-            background: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #1e1b4b 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
-            position: relative;
-        }
+input{
+background:#0f172a;
+color:#fff;
+border:1px solid #3b82f6;
+}
 
-        /* ব্যাকগ্রাউন্ড গ্লো ইফেক্ট */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(99, 102, 241, 0.12);
-            border-radius: 50%;
-            top: 15%;
-            left: 15%;
-            filter: blur(80px);
-            z-index: 0;
-        }
+input::placeholder{
+color:#cbd5e1;
+}
+button{cursor:pointer;background:linear-gradient(45deg,#2563eb,#06b6d4);color:#fff;font-weight:700}
+#clearBtn{display:none}
+#loader{display:none;text-align:center;padding:20px}
+.spin{width:60px;height:60px;border:8px solid #ddd;border-top:8px solid #2563eb;border-radius:50%;margin:auto;animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.card{
+margin-top:20px;
+background:rgba(15,23,42,.65);
+backdrop-filter:blur(15px);
+display:flex;
+gap:20px;
+padding:20px;
+border-radius:20px;
+box-shadow:0 8px 25px rgba(0,0,0,.4);
+flex-wrap:wrap;
+border:1px solid rgba(255,255,255,.15);
+}
+.left{text-align:center;width:220px}
+.left img{width:180px;height:220px;object-fit:cover;border-radius:12px}
+.name{font-size:40px;font-weight:700;color:#ffffff}
+.seal{
+width:140px;
+height:140px;
+border:6px solid #16a34a;
+border-radius:50%;
+margin-top:20px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:22px;
+font-weight:700;
+color:#16a34a;
+animation:seal 2s infinite;
+box-shadow:0 0 15px rgba(22,163,74,.4);
+}
 
-        /* মেইন কন্টেইনার */
-        .search-container {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px 35px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 550px;
-            position: relative;
-            z-index: 1;
-            text-align: center;
-        }
+@keyframes seal{
 
-        h2 {
-            color: #ffffff;
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            background: linear-gradient(to right, #ffffff, #c7d2fe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+0%{
+transform:scale(1);
+}
 
-        .search-box-wrapper {
-            position: relative;
-            width: 100%;
-        }
+50%{
+transform:scale(1.05);
+}
 
-        input[type="text"] {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(24, 34, 54, 0.6);
-            border: 2px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            font-size: 17px;
-            color: #fff;
-            outline: none;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+100%{
+transform:scale(1);
+}
 
-        input[type="text"]:focus {
-            border-color: #6366f1;
-            background: rgba(24, 34, 54, 0.9);
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.3);
-        }
+}
+.nf{background:#0cff00}
+.actions{margin-top:15px}
+.actions button{margin-right:8px}
 
-        /* লোডার */
-        .loader-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 15px;
-        }
-        .custom-loader {
-            width: 35px;
-            height: 35px;
-            border: 3px solid rgba(255, 255, 255, 0.05);
-            border-top: 3px solid #6366f1;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        .loader-text {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-top: 8px;
-        }
+.bottomArea{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
 
-        .error-message {
-            color: #f87171;
-            font-size: 15px;
-            margin-top: 15px;
-            display: none;
-            animation: shake 0.3s ease;
-        }
+#qr{
+    width:110px;
+    height:110px;
+    padding:10px;
+    border:2px solid #2563eb;
+    border-radius:8px;
+    background:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
 
-        /* প্রফেশনাল প্রোফাইল কার্ড */
-        .profile-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 550px;
-            padding: 30px;
-            margin-top: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
-            display: none;
-        }
+.seal{
+width:140px;
+height:140px;
+border:6px solid #16a34a;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:22px;
+font-weight:700;
+color:#67009d;
+animation:seal 2s infinite;
+box-shadow:0 0 15px rgba(22,163,74,.4);
+}
 
-        .profile-card.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+.badge{
+display:inline-block;
+padding:12px 25px;
+border-radius:30px;
+font-weight:700;
+color:#ffffff;
+animation:flash 1.5s infinite;
+}
 
-        .card-body {
-            display: flex;
-            width: 100%;
-            gap: 25px;
-            align-items: center;
-        }
+.ok{
+background:#16a34a;
+}
 
-        .avatar-zone img {
-            width: 125px;
-            height: 155px;
-            object-fit: cover;
-            border-radius: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
+.nf{
+background:#dc2626;
+}
 
-        .info-zone {
-            flex: 1;
-        }
+@keyframes flash{
 
-        .info-zone h3 {
-            color: #ffffff;
-            font-size: 24px;
-            margin-bottom: 12px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
+0%{
+transform:scale(1);
+opacity:1;
+}
 
-        .info-row {
-            display: flex;
-            margin-bottom: 8px;
-            font-size: 15px;
-            color: #e2e8f0;
-        }
+50%{
+transform:scale(1.05);
+opacity:.8;
+}
 
-        .info-label {
-            color: #94a3b8;
-            width: 90px;
-            font-weight: 500;
-        }
+100%{
+transform:scale(1);
+opacity:1;
+}
 
-        .info-value {
-            flex: 1;
-            font-weight: 600;
-        }
+}
 
-        /* ডায়নামিক ভেরিফাইড ব্যাজ */
-        .verified-badge {
-            width: 100%;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 10px;
-            border-radius: 12px;
-            color: #10b981;
-            font-weight: 700;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-            animation: pulseBg 2s infinite;
-        }
+.wrap{
+max-width:1000px;
+margin:auto;
+padding:20px;
+animation:pageOpen 1.2s ease;
+}
 
-        .verified-badge i {
-            font-size: 18px;
-        }
+@keyframes pageOpen{
 
-        /* অ্যানিমেশনসমূহ */
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-        @keyframes pulseBg { 0%, 100% { background: rgba(16, 185, 129, 0.1); } 50% { background: rgba(16, 185, 129, 0.2); } }
+0%{
+opacity:0;
+transform:translateY(40px) scale(.95);
+}
 
-        /* মোবাইল ফ্রেন্ডলি ডিজাইন */
-        @media (max-width: 500px) {
-            .card-body {
-                flex-direction: column;
-                text-align: center;
-            }
-            .info-row {
-                flex-direction: column;
-                gap: 2px;
-            }
-            .info-label {
-                width: 100%;
-                color: #818cf8;
-            }
-        }
-    </style>
+100%{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+
+}
+
+</style>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
 <body>
+<div class="wrap">
+<h1><i class="fa-solid fa-user-graduate"></i> Student Verification Portal</h1>
+<div class="box">
+<input id="roll" placeholder="🎫 Roll Number">
+<input id="reg" placeholder="📝 Registration Number">
+<button onclick="searchData()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+<button id="clearBtn" onclick="clearData()"><i class="fa-solid fa-trash"></i> Clear</button>
+</div>
+<div id="loader"><div class="spin"></div><p>Searching...</p></div>
+<div id="result"></div>
+<footer>
 
-    <div class="search-container">
-        <h2>শিক্ষার্থী তথ্য লাইভ অনুসন্ধান</h2>
-        
-        <div class="search-box-wrapper">
-            <input type="text" id="searchInput" oninput="searchByRollOnly()" placeholder="শিক্ষার্থীর রোল নম্বরটি লিখুন..." autocomplete="off" disabled>
-        </div>
+@ 2026 SMART COMPUTER - All Rights Reserved
 
-        <div id="loaderArea" class="loader-wrapper">
-            <div class="custom-loader"></div>
-            <div class="loader-text">সার্ভার থেকে ডেটা সিঙ্ক হচ্ছে...</div>
-        </div>
-        
-        <div id="errorMsg" class="error-message"></div>
-    </div>
+</footer>
+</div>
+<script>
+const API ="https://script.google.com/macros/s/AKfycbwG2ll2cJfpz7QIiXN2sMKOrUTj12kY8i_A_cySXEqNAfIfj846IYNOmBu1ra0OE6ht/exec";
 
-    <div id="profileCard" class="profile-card">
-        <div class="card-body">
-            <div class="avatar-zone">
-                <img id="studentPhoto" src="" alt="Student Photo">
-            </div>
-            <div class="info-zone">
-                <h3 id="studentName"></h3>
-                <div class="info-row"><div class="info-label">রোল নম্বর:</div><div class="info-value" id="studentRoll"></div></div>
-                <div class="info-row"><div class="info-label">ঠিকানা:</div><div class="info-value" id="studentAddress"></div></div>
-                <div class="info-row"><div class="info-label">মোবাইল:</div><div class="info-value" id="studentMobile"></div></div>
-            </div>
-        </div>
-        
-        <div class="verified-badge">
-            <i class="fa-solid fa-circle-check"></i> Verified Student
-        </div>
-    </div>
+async function searchData(){
 
-    <script>
-        // আপনার গুগল অ্যাপস স্ক্রিপ্ট ওয়েব অ্যাপ ইউআরএল এখানে বসান
-        var apiURL = "https://script.google.com/macros/s/AKfycbytO0KG-8bWkhsJOYNRnD5b0JINtYoE-kiZXybHrQBcW6JZbIZYwNlrdffqnpn2Qh_Ptg/exec"; 
-        var studentData = [];
+loader.style.display="block";
 
-        // পেজ লোড হওয়ার সাথে সাথে ব্যাকগ্রাউন্ডে ডেটা লোড হবে
-        window.onload = function() {
-            fetch(apiURL)
-                .then(response => response.json())
-                .then(data => {
-                    studentData = data;
-                    document.getElementById('loaderArea').style.display = 'none';
-                    document.getElementById('searchInput').disabled = false;
-                    document.getElementById('searchInput').focus();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('loaderArea').innerHTML = '<div style="color:#f87171; font-weight:600; margin-top:10px;">সার্ভার সংযোগ ব্যর্থ! পেজ রিফ্রেশ করুন।</div>';
-                });
-        };
+let url =
+API +
+"?roll=" +
+roll.value +
+"&reg=" +
+reg.value;
 
-        // মোবাইল নম্বর ফরম্যাটার ফাংশন (যেমন: 01919336660 -> 01919-336660)
-        function formatMobileNumber(number) {
-            var cleanNumber = String(number).trim().replace(/-/g, ''); // আগে থেকে হাইফেন থাকলে তা রিমুভ করে ক্লিন করবে
-            if (cleanNumber.length === 11) {
-                return cleanNumber.substring(0, 5) + '-' + cleanNumber.substring(5);
-            }
-            return cleanNumber; // নম্বর ১১ ডিজিটের না হলে মূল নম্বরই ব্যাক করবে
-        }
+let res =
+await fetch(url);
 
-        // শুধুমাত্র রোল নম্বর দ্বারা লাইভ সার্চ ফাংশন
-        function searchByRollOnly() {
-            var query = document.getElementById('searchInput').value.trim();
-            var card = document.getElementById('profileCard');
-            var errorMsg = document.getElementById('errorMsg');
+let json =
+await res.json();
 
-            if (query === '') {
-                hideProfileCard();
-                errorMsg.style.display = 'none';
-                return;
-            }
+loader.style.display="none";
 
-            // শুধুমাত্র রোল নম্বরের সাথে নিখুঁত মিল (Exact Match) খোঁজা হচ্ছে
-            var student = studentData.find(s => String(s.Roll).trim() === query);
+if(json.status){
 
-            if (student) {
-                errorMsg.style.display = 'none';
-                
-                document.getElementById('studentName').innerText = student.Name || 'জানা যায়নি';
-                document.getElementById('studentRoll').innerText = student.Roll;
-                document.getElementById('studentAddress').innerText = student.Address || 'জানা যায়নি';
-                
-                // মোবাইল নম্বর ফরম্যাট প্রয়োগ
-                document.getElementById('studentMobile').innerText = formatMobileNumber(student.Mobile);
+showData(json.data);
 
-                // ড্রাইভ ইমেজ স্মার্ট ফিল্টার
-                var rawUrl = student.Photo_URL || '';
-                if (rawUrl.includes('drive.google.com')) {
-                    var fileId = rawUrl.split('/d/')[1]?.split('/')[0];
-                    if (fileId) {
-                        rawUrl = 'https://lh3.googleusercontent.com/d/' + fileId;
-                    }
-                }
-                document.getElementById('studentPhoto').src = rawUrl || 'https://via.placeholder.com/150';
+clearBtn.style.display="inline-block";
 
-                card.style.display = 'flex';
-                setTimeout(() => { card.classList.add('active'); }, 50);
-            } else {
-                hideProfileCard();
-                errorMsg.innerText = 'দুঃখিত, এই রোল নম্বরের কোনো তথ্য পাওয়া যায়নি!';
-                errorMsg.style.display = 'block';
-            }
-        }
+}else{
 
-        function hideProfileCard() {
-            var card = document.getElementById('profileCard');
-            card.classList.remove('active');
-            setTimeout(() => { card.style.display = 'none'; }, 400);
-        }
-    </script>
+result.innerHTML=
+`
+<div style="text-align:center;margin-top:30px;">
+<div class="badge nf">
+❌ NOT FOUND
+</div>
+</div>
+`;
+
+clearBtn.style.display="inline-block";
+
+}
+
+}
+function showData(d){
+result.innerHTML=`
+<div id="printArea" class="card">
+<div class="left">
+<img src="${d.Photo}">
+</div>
+<div>
+<div class="name">${d["Student Name"]}</div>
+<p><b>Father's Name:</b> ${d["Father Name"]}</p>
+<p><b>Mother's Name:</b> ${d["Mother Name"]}</p>
+<p>
+<b>Date of Birth:</b>
+${new Date(d.DOB).toLocaleDateString(
+'en-GB',
+{
+day:'2-digit',
+month:'short',
+year:'numeric'
+}
+).replace(/ /g,'-')}
+</p>
+<p><b>Subject:</b> ${d.Subject}</p>
+<p><b>Roll:</b> ${d.Roll}</p>
+<p><b>Registration:</b> ${d.Registration}</p>
+<div class="bottomArea">
+
+<div id="qr"></div>
+
+<div class="seal">
+✔ Verified
+</div>
+
+</div>
+</div>
+</div>`;
+new QRCode(
+document.getElementById("qr"),
+{
+text:
+"Student Name : " + d["Student Name"] +
+"\nFather Name : " + d["Father Name"] +
+"\nMother Name : " + d["Mother Name"] +
+"\nDate of Birth : " + d.DOB +
+"\nSubject : " + d.Subject +
+"\nRoll : " + d.Roll +
+"\nRegistration : " + d.Registration,
+
+width:100,
+height:100
+
+}
+);
+}
+
+function clearData(){
+result.innerHTML="";
+clearBtn.style.display="none";
+roll.value="";
+reg.value="";
+}
+
+</script>
 </body>
 </html>
